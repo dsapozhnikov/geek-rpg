@@ -8,23 +8,29 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class MyGdxGame extends ApplicationAdapter {
 	SpriteBatch batch;
-	Texture texture;
+	Background background;
 	
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-		texture = new Texture("charSkeleton.tga");
+		background = new Background();
+
 
 
 	}
 
 	@Override
 	public void render () {
+		float dt = Gdx.graphics.getDeltaTime();
+		update(dt);
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		batch.begin();
-		batch.draw(texture, 100, 100);
+		background.render(batch);
 		batch.end();
+	}
+	public void update(float dt) {
+
 	}
 	
 	@Override
