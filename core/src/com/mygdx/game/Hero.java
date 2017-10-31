@@ -7,23 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 
 import java.util.Vector;
 
-public class Hero {
-    private Texture texture;
-    private int health;
-    private String name;
-    private int maxHealth;
-    private int level;
-
-    private int strenght;
-    private int agility;
-    private int endurance;
-    private int intilligence;
-
-    private Vector2 position;
-
-    public void setPosition(Vector2 position) {
-        this.position = position;
-    }
+public class Hero extends AbstractUnit {
 
     public Hero() {
         this.texture = new Texture("charTank.tga");
@@ -35,6 +19,8 @@ public class Hero {
         this.agility = 10;
         this.endurance = 10;
         this.intilligence = 10;
+        this.defense = 5;
+        this.flip = false;
 
     }
 
