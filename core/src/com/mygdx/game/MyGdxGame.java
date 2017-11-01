@@ -30,6 +30,7 @@ public class MyGdxGame extends ApplicationAdapter {
 
 	@Override
 	public void render () {
+
 		float dt = Gdx.graphics.getDeltaTime();
 		update(dt);
 		Gdx.gl.glClearColor(1, 1, 1, 1);
@@ -41,11 +42,17 @@ public class MyGdxGame extends ApplicationAdapter {
 		batch.end();
 	}
 	public void update(float dt) {
+		monster.update(dt);
+		hero.update(dt);
 		if (currentUnit==hero) {
 			if (InputHandler.checkClickInRect(monster.rect)) {
 				hero.meleeAttack(monster);
 				currentUnit=monster;
 			}
+		}
+		if (InputHandler.checkClickInRect(hero.rect)) {
+			monster.meleeAttack(hero);
+			currentUnit=hero;
 		}
 
 	}
