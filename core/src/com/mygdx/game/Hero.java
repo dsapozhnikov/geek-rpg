@@ -22,10 +22,13 @@ public class Hero extends AbstractUnit {
         this.defense = 5;
         this.flip = false;
 
+        this.hpLength = new Texture("hpLength.png");
+        this.hpFrame = new Texture("frame.png");
+
     }
 
-    public void render(SpriteBatch batch) {
-        batch.draw(texture,position.x,position.y
-        );
-    }
+//   public void render(SpriteBatch batch) {
+//       batch.draw(hpFrame,position.x,position.y+175,0,0,104,24);
+//       batch.draw(hpLength,position.x,position.y+175,0,0,102,22);
+//    }
 }
