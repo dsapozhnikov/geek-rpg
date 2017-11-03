@@ -25,7 +25,7 @@ public class MyGdxGame extends ApplicationAdapter {
 	//AbstractUnit unit;
 	//Hero hero;
 	//Monster monster;
-	List<AbstractUnit>units = new LinkedList<AbstractUnit>();
+	private List<AbstractUnit>units;
 	private AbstractUnit currentUnit;
 	private int index = 0;
 
@@ -34,7 +34,7 @@ public class MyGdxGame extends ApplicationAdapter {
 	
 	@Override
 	public void create () {
-
+		units = new LinkedList<AbstractUnit>();
 		batch = new SpriteBatch();
 		background = new Background();
 	//	hero = new Hero();
@@ -42,17 +42,35 @@ public class MyGdxGame extends ApplicationAdapter {
 
 	//	monster = new Monster();
 		units.add(new Monster());
+		units.add(new Monster());
+		units.add(new Monster());
+		units.add(new Monster());
+		units.add(new Hero());
+		units.add(new Hero());
 		units.add(new Hero());
 		units.add(new Monster());
      	units.add(new Monster());
+     	int heroPlacementIndex = 400;
+     	int MonsterPLacementIndex =700;
+     	int updateIndex = 100;
+     	int Yplacementt = 200;
+     	int YupdateIndex = 30;
 		for (int i = 0; i <units.size(); i++) {
+
 			if (units.get(i) instanceof Hero) {
-				units.get(i).setPosition(new Vector2(400+i*40,200+i*40));
+				units.get(i).setPosition(new Vector2(heroPlacementIndex,Yplacementt));
 				currentUnit=units.get(i);
+				heroPlacementIndex+=updateIndex;
+				Yplacementt+=YupdateIndex;
 			}
 			if (units.get(i) instanceof Monster) {
-				units.get(i).setPosition(new Vector2(700+i*40,200+i*40));
+				units.get(i).setPosition(new Vector2(MonsterPLacementIndex,Yplacementt));
+				MonsterPLacementIndex+=updateIndex;
+				Yplacementt+=YupdateIndex;
 			}
+
+//			MonsterPLacementIndex+=updateIndex;
+//			Yplacementt+=YupdateIndex;
 		}
 
 		//hero.setPosition(new Vector2(400,200));
@@ -88,18 +106,21 @@ public class MyGdxGame extends ApplicationAdapter {
 			for (AbstractUnit unit : units) {
 				if (unit instanceof Monster) {
 					if (InputHandler.checkClickInRect(unit.rect)) {
-
+						if(index == units.size()-1) {index = 0;break;}
 					    currentUnit.meleeAttack(unit);
-						if(index == units.size()-1) index = 0;
-					    if (unit.health<=0){
-					    //	unit.attackAction=NULL;
-					    	unit.strenght=0;
-					    	unit.defense=0;
-					    	break;
-						}
 						index++;
-					    break;
+						if(index == units.size()) {index = 0;
+							currentUnit = units.get(index);}
 
+
+						if (unit.health<=0) {
+							index++;
+							currentUnit = units.get(index);
+							currentUnit.meleeAttack(unit);
+							unit.strenght=0;
+							unit.defense=0;
+						}
+					    break;
 					}
 				}
 			}
@@ -110,15 +131,21 @@ public class MyGdxGame extends ApplicationAdapter {
 					if (InputHandler.checkClickInRect(unit.rect)) {
 
 						currentUnit.meleeAttack(unit);
-						if(index == units.size()-1) index = 0;
-						if (unit.health<=0){
-							unit.attackAction=NULL;
+						index++;
+						if(index == units.size()) {index = 0;
+						currentUnit = units.get(index);}
+
+						if (unit.health<=0) {
+							index++;
+							currentUnit = units.get(index);
+							currentUnit.meleeAttack(unit);
+							//unit.attackAction=NULL;
 							unit.strenght=0;
 							unit.defense=0;
-							break;
 
 						}
-						index++;
+						break;
+
 
 					}
 				}
