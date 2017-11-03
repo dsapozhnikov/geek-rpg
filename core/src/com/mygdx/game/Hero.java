@@ -12,9 +12,10 @@ import java.util.Vector;
 
 public class Hero extends AbstractUnit {
 
-    public Hero() {
+    public Hero(Vector2 position) {
 
-        this.texture = new Texture("charTank.tga");
+        super(position,new Texture("charTank.tga"));
+
         this.name = "Геральт";
         this.maxHealth= 100;
         this.health = this.maxHealth;
