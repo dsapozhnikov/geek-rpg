@@ -11,9 +11,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 public class Monster extends AbstractUnit {
 
 
-    public Monster() {
+    public Monster(Vector2 position) {
 
-        this.texture = new Texture("charSkeleton.tga");
+        super(position,new Texture("charSkeleton.tga"));
+
         this.name = "Skelet";
         this.maxHealth= 50;
         this.health = this.maxHealth;
