@@ -1,14 +1,18 @@
 package com.mygdx.game;
 
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 
 public class Monster extends AbstractUnit {
 
 
     public Monster() {
+
         this.texture = new Texture("charSkeleton.tga");
         this.name = "Skelet";
         this.maxHealth= 50;
@@ -20,8 +24,11 @@ public class Monster extends AbstractUnit {
         this.intilligence = 0;
         this.defense = 1;
         this.flip = true;
+
         this.hpFrame = new Texture("frame.png");
         this.hpLength = new Texture("hpLength.png");
+        this.hpLabel = new Label("",labelStyle);
+        this.missLabel = new Label("", labelStyle);
 
 
     }

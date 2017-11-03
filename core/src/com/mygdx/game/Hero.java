@@ -1,15 +1,19 @@
 package com.mygdx.game;
 
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 
 import java.util.Vector;
 
 public class Hero extends AbstractUnit {
 
     public Hero() {
+
         this.texture = new Texture("charTank.tga");
         this.name = "Геральт";
         this.maxHealth= 100;
@@ -24,6 +28,9 @@ public class Hero extends AbstractUnit {
 
         this.hpLength = new Texture("hpLength.png");
         this.hpFrame = new Texture("frame.png");
+        this.hpLabel = new Label("",labelStyle);
+        this.missLabel = new Label("", labelStyle);
+
 
     }
 

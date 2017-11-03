@@ -2,27 +2,35 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 
-import java.awt.event.HierarchyEvent;
+
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+
+import static com.mygdx.game.AbstractUnit.labelStyle;
 
 
 public class MyGdxGame extends ApplicationAdapter {
 	SpriteBatch batch;
 	Background background;
+	public  static final int NULL = 0;
 	//AbstractUnit unit;
 	//Hero hero;
 	//Monster monster;
 	List<AbstractUnit>units = new LinkedList<AbstractUnit>();
-	AbstractUnit currentUnit;
-	private int heroIndex;
-	private int monsterIndex;
-	AbstractUnit a;
+	private AbstractUnit currentUnit;
+	private int index = 0;
+
+
+
 	
 	@Override
 	public void create () {
@@ -36,14 +44,19 @@ public class MyGdxGame extends ApplicationAdapter {
 		units.add(new Monster());
 		units.add(new Hero());
 		units.add(new Monster());
-		//hero.setPosition(new Vector2(400,200));
-		//monster.setPosition(new Vector2(700,200));
-		for (AbstractUnit a: units) {
-			if (a instanceof Hero) {
-				currentUnit=a;
+     	units.add(new Monster());
+		for (int i = 0; i <units.size(); i++) {
+			if (units.get(i) instanceof Hero) {
+				units.get(i).setPosition(new Vector2(400+i*40,200+i*40));
+				currentUnit=units.get(i);
+			}
+			if (units.get(i) instanceof Monster) {
+				units.get(i).setPosition(new Vector2(700+i*40,200+i*40));
 			}
 		}
-		
+
+		//hero.setPosition(new Vector2(400,200));
+		//monster.setPosition(new Vector2(700,200));
 
 	}
 
@@ -56,36 +69,64 @@ public class MyGdxGame extends ApplicationAdapter {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		batch.begin();
 		background.render(batch);
-		for (AbstractUnit a: units) {
+		for (AbstractUnit a:units) {
 			a.render(batch);
-		//			monster.render(batch);
 		}
-		
+		//			monster.render(batch);
+
 		batch.end();
 	}
+
 	public void update(float dt) {
-		for (AbstractUnit a : units) {
-			a.update(dt);
+		for (AbstractUnit unit : units) {
+			unit.update(dt);
 		}
-		for (int i = 0; i <units.size(); i++) {
-			if (currentUnit instanceof Hero) {
-				a = currentUnit;
-				if (units.get(i)instanceof Monster) {
-					if (InputHandler.checkClickInRect(units.get(i).rect)) {
-						currentUnit.meleeAttack(units.get(i));
-						currentUnit=units.get(i);
+
+		currentUnit = units.get(index);
+
+		if (currentUnit instanceof Hero) {
+			for (AbstractUnit unit : units) {
+				if (unit instanceof Monster) {
+					if (InputHandler.checkClickInRect(unit.rect)) {
+
+					    currentUnit.meleeAttack(unit);
+						if(index == units.size()-1) index = 0;
+					    if (unit.health<=0){
+					    //	unit.attackAction=NULL;
+					    	unit.strenght=0;
+					    	unit.defense=0;
+					    	break;
+						}
+						index++;
+					    break;
+
 					}
 				}
-
-			}if (InputHandler.checkClickInRect(a.rect)) {
-				currentUnit.meleeAttack(a);
-				currentUnit=a;
 			}
-
-
 		}
-		
-//		monster.update(dt);
+		if (currentUnit instanceof Monster) {
+			for (AbstractUnit unit : units) {
+				if (unit instanceof Hero) {
+					if (InputHandler.checkClickInRect(unit.rect)) {
+
+						currentUnit.meleeAttack(unit);
+						if(index == units.size()-1) index = 0;
+						if (unit.health<=0){
+							unit.attackAction=NULL;
+							unit.strenght=0;
+							unit.defense=0;
+							break;
+
+						}
+						index++;
+
+					}
+				}
+			}
+		}
+	}
+
+		//		monster.update(dt);
 //		hero.update(dt);
 //		if (currentUnit==hero) {
 //			if (InputHandler.checkClickInRect(monster.rect)) {
@@ -98,7 +139,7 @@ public class MyGdxGame extends ApplicationAdapter {
 //			currentUnit=hero;
 //		}
 
-	}
+
 	
 	@Override
 	public void dispose () {
