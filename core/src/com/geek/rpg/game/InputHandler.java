@@ -1,31 +1,23 @@
-package com.mygdx.game;
-
+package com.geek.rpg.game;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.math.*;
 import com.badlogic.gdx.math.Rectangle;
 
-import java.awt.*;
-
 public class InputHandler {
-
-    public static float getX() {
+    public static int getX() {
         return Gdx.input.getX();
     }
 
-    public static float getY() {
+    public static int getY() {
         return 720 - Gdx.input.getY();
     }
 
     public static boolean checkClickInRect(Rectangle rect) {
         if (Gdx.input.justTouched()) {
-            if (rect.contains(getX(), getY())) {
+            if(rect.contains(getX(), getY())) {
                 return true;
             }
         }
         return false;
     }
 }
-
-
-
