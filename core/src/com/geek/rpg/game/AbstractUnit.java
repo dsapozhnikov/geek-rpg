@@ -1,5 +1,6 @@
 package com.geek.rpg.game;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -8,6 +9,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.geek.rpg.game.effects.DefenceStanceEffect;
 import com.geek.rpg.game.effects.Effect;
+import com.geek.rpg.game.effects.EffectSystem;
 import com.geek.rpg.game.effects.RegenerationEffect;
 
 import java.util.ArrayList;
@@ -39,7 +41,7 @@ public abstract class AbstractUnit {
     protected float attackAction;
     protected float takeDamageAction;
 
-    protected List<Effect> effects;
+   protected EffectSystem effectSystem;
 
     public int getLevel() {
         return level;
@@ -72,25 +74,31 @@ public abstract class AbstractUnit {
     public boolean isAlive() {
         return hp > 0;
     }
+   // Texture texture1;
 
     public AbstractUnit(GameScreen game, Vector2 position, Texture texture) {
         this.game = game;
         this.position = position;
         this.texture = texture;
         this.rect = new Rectangle(position.x, position.y, texture.getWidth(), texture.getHeight());
-        this.effects = new ArrayList<Effect>();
+        //this.effects = new ArrayList<Effect>();
         Pixmap pixmap = new Pixmap(90, 20, Pixmap.Format.RGBA8888);
         pixmap.setColor(0, 0, 0, 1);
         pixmap.fill();
         pixmap.setColor(1, 1, 1, 1);
         pixmap.fillRectangle(2, 2, 86, 16);
+
+//        Pixmap pixmap1 = new Pixmap(50,50,Pixmap.Format.RGBA8888);
+//        pixmap1.setColor(0,0,0,0);
+//        pixmap1.fill();
+//        texture1 = new Texture(pixmap1);
         this.textureHpBar = new Texture(pixmap);
     }
 
-    public void setPosition(Vector2 position) {
-        this.position = position;
-        this.rect = new Rectangle(position.x, position.y, texture.getWidth(), texture.getHeight());
-    }
+//    public void setPosition(Vector2 position) {
+//        this.position = position;
+//        this.rect = new Rectangle(position.x, position.y, texture.getWidth(), texture.getHeight());
+//    }
 
     public void takeDamage(int dmg) {
         this.takeDamageAction = 1.0f;
@@ -98,10 +106,11 @@ public abstract class AbstractUnit {
     }
 
     public void render(SpriteBatch batch) {
+      //  batch.draw(texture1,500,500);
         if (takeDamageAction > 0) {
             batch.setColor(1f, 1f - takeDamageAction, 1f - takeDamageAction, 1f);
         }
-        float dx = (50f * (float) Math.sin((1f - attackAction) * 3.14f));
+        float dx = (200f * (float) Math.sin((1f - attackAction) * 3.14f));
         if (flip) dx *= -1;
         float ang = 0;
         if (!isAlive()) ang = 90;
@@ -111,11 +120,11 @@ public abstract class AbstractUnit {
 
     public void renderInfo(SpriteBatch batch, BitmapFont font) {
         batch.setColor(0.5f, 0, 0, 1);
-        batch.draw(textureHpBar, position.x, position.y + 130);
+        batch.draw(textureHpBar, position.x, position.y +this.texture.getHeight());
         batch.setColor(0, 1, 0, 1);
-        batch.draw(textureHpBar, position.x, position.y + 130, 0, 0, (int) ((float) hp / (float) maxHp * textureHpBar.getWidth()), 20);
+        batch.draw(textureHpBar, position.x, position.y +this.texture.getHeight(), 0, 0, (int) ((float) hp / (float) maxHp * textureHpBar.getWidth()), 20);
         batch.setColor(1, 1, 1, 1);
-        font.draw(batch, String.valueOf(hp), position.x, position.y + 149, 90, 1, false);
+        font.draw(batch, String.valueOf(hp), position.x,position.y +this.texture.getHeight()+19, 90, 1, false);
     }
 
     public void update(float dt) {
@@ -127,15 +136,15 @@ public abstract class AbstractUnit {
         }
     }
 
-    public void getTurn() {
-        for (int i = effects.size() - 1; i >= 0; i--) {
-            effects.get(i).tick();
-            if (effects.get(i).isEnded()) {
-                effects.get(i).end();
-                effects.remove(i);
-            }
-        }
-    }
+//    public void getTurn() {
+//        for (int i = effects.size() - 1; i >= 0; i--) {
+//            effects.get(i).tick();
+//            if (effects.get(i).isEnded()) {
+//                effects.get(i).end();
+//                effects.remove(i);
+//            }
+//        }
+//    }
 
     public void heal(float percent) {
         int prevHp = hp;
@@ -149,13 +158,14 @@ public abstract class AbstractUnit {
     public void defenceStance(int rounds) {
         DefenceStanceEffect dse = new DefenceStanceEffect();
         dse.start(game.getInfoSystem(), this, rounds);
-        effects.add(dse);
+        effectSystem.addEffect(dse);
+
     }
 
     public void regenerate(int rounds) {
         RegenerationEffect re = new RegenerationEffect();
         re.start(game.getInfoSystem(), this, rounds);
-        effects.add(re);
+        effectSystem.addEffect(re);
     }
 
     public void meleeAttack(AbstractUnit enemy) {
