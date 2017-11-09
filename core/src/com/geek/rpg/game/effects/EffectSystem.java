@@ -7,10 +7,11 @@ import java.util.List;
 
 public class EffectSystem {
    private  List<Effect>effectsList;
-   public String name;
-    public EffectSystem(String name) {
-      effectsList =  new ArrayList<Effect>();
-      this.name=name;
+
+    public EffectSystem() {
+      effectsList =  new ArrayList<Effect>();    // класс система эффектов создан для вынесения логики управления эффектами
+                                                 //
+
     }
     public void addEffect(Effect effect) {
                effectsList.add(effect);

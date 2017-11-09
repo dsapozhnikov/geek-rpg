@@ -46,10 +46,14 @@ public class GameScreen implements Screen {
         infoSystem = new InfoSystem();
         textureSelector = new Texture("selector.png");
         units = new ArrayList<AbstractUnit>();
-        player = new Hero(this, new Vector2(500, 200));
+        player = new Hero(this, new Vector2(200, 200));
         units.add(player);
         units.add(new Monster(this, new Vector2(700, 200), player));
-        units.add(new Monster(this, new Vector2(800, 100), player));
+        units.add(new Monster(this, new Vector2(800, 340), player));
+        units.add(new Monster(this, new Vector2(850, 250), player));
+        units.add(new Monster(this, new Vector2(900, 200), player));
+        units.add(new Monster(this, new Vector2(640, 250), player));
+        units.add(new Monster(this, new Vector2(600, 300), player));
         currentUnit = 0;
         selectedUnit = 0;
         prepareButtons();
@@ -62,7 +66,7 @@ public class GameScreen implements Screen {
 
     public void prepareButtons() {
         btnGUI = new ArrayList<Button>();
-        Button btnAttack = new Button("Attack", new Texture("btn.png"), new Rectangle(200, 20, 80, 80)) {
+        Button btnAttack = new Button("Attack", new Texture("newAttack.png"), new Rectangle(200, 20, 80, 80)) {
             @Override
             public void action() {
                 if (units.get(selectedUnit) instanceof Monster) {
@@ -71,21 +75,21 @@ public class GameScreen implements Screen {
                 }
             }
         };
-        Button btnHeal = new Button("Heal", new Texture("btn.png"), new Rectangle(300, 20, 80, 80)) {
+        Button btnHeal = new Button("Heal", new Texture("heal.png"), new Rectangle(320, 22, 80, 80)) {
             @Override
             public void action() {
                 player.heal(0.15f);
                 nextTurn();
             }
         };
-        Button btnDefence = new Button("Defence", new Texture("btn.png"), new Rectangle(400, 20, 80, 80)) {
+        Button btnDefence = new Button("Defence", new Texture("schit.png"), new Rectangle(430, 25, 80, 80)) {
             @Override
             public void action() {
                 player.defenceStance(1);
                 nextTurn();
             }
         };
-        Button btnRegeneration = new Button("Regeneration", new Texture("btn.png"), new Rectangle(500, 20, 80, 80)) {
+        Button btnRegeneration = new Button("Regeneration", new Texture("regeneration.png"), new Rectangle(555, 23, 80, 80)) {
             @Override
             public void action() {
                 player.regenerate(3);
@@ -105,7 +109,8 @@ public class GameScreen implements Screen {
                 currentUnit = 0;
             }
         } while (!units.get(currentUnit).isAlive());
-        units.get(currentUnit).getTurn();
+        //units.get(currentUnit).getTurn();
+        units.get(currentUnit).effectSystem.getTurn();
         animationTimer = 1.0f;
     }
 
@@ -139,7 +144,7 @@ public class GameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.begin();
         background.render(batch);
-        for (int i = 0; i < units.size(); i++) {
+        for (int i = units.size()-1; i>=0; i--) {
             if (currentUnit == i) {
                 batch.setColor(1, 1, 0, 0.8f);
                 batch.draw(textureSelector, units.get(i).getPosition().x, units.get(i).getPosition().y - 5);

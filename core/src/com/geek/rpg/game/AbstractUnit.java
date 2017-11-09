@@ -43,6 +43,7 @@ public abstract class AbstractUnit {
 
    protected EffectSystem effectSystem;
 
+
     public int getLevel() {
         return level;
     }
@@ -77,11 +78,12 @@ public abstract class AbstractUnit {
    // Texture texture1;
 
     public AbstractUnit(GameScreen game, Vector2 position, Texture texture) {
+        this.effectSystem = new EffectSystem();
         this.game = game;
         this.position = position;
         this.texture = texture;
         this.rect = new Rectangle(position.x, position.y, texture.getWidth(), texture.getHeight());
-        //this.effects = new ArrayList<Effect>();
+
         Pixmap pixmap = new Pixmap(90, 20, Pixmap.Format.RGBA8888);
         pixmap.setColor(0, 0, 0, 1);
         pixmap.fill();
@@ -136,7 +138,7 @@ public abstract class AbstractUnit {
         }
     }
 
-//    public void getTurn() {
+//    public void getTurn() {                                выенесено в класс системы эффектов
 //        for (int i = effects.size() - 1; i >= 0; i--) {
 //            effects.get(i).tick();
 //            if (effects.get(i).isEnded()) {
@@ -158,6 +160,7 @@ public abstract class AbstractUnit {
     public void defenceStance(int rounds) {
         DefenceStanceEffect dse = new DefenceStanceEffect();
         dse.start(game.getInfoSystem(), this, rounds);
+        //effects.add(dse);
         effectSystem.addEffect(dse);
 
     }
@@ -165,6 +168,7 @@ public abstract class AbstractUnit {
     public void regenerate(int rounds) {
         RegenerationEffect re = new RegenerationEffect();
         re.start(game.getInfoSystem(), this, rounds);
+       //effects.add(re);
         effectSystem.addEffect(re);
     }
 
@@ -172,6 +176,11 @@ public abstract class AbstractUnit {
         attackAction = 1.0f;
         if (!Calculator.isTargetEvaded(this, enemy)) {
             int dmg = Calculator.getMeleeDamage(this, enemy);
+            if (Calculator.isCritical(this, enemy)) {
+                int critical = Calculator.doCritical(dmg,this, enemy);
+                enemy.takeDamage(critical);
+                game.getInfoSystem().addMessage("CRITICAL!!! "+critical,enemy,FlyingText.Colors.RED);
+            }
             enemy.takeDamage(dmg);
             game.getInfoSystem().addMessage("-" + dmg, enemy, FlyingText.Colors.RED);
         } else {
