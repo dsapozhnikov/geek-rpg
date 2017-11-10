@@ -1,26 +1,17 @@
 package com.geek.rpg.game;
 
-import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class RpgGame extends Game {
     private SpriteBatch batch;
-    private GameScreen gameScreen;
+    private AbstractUnit.GameScreen gameScreen;
 
     @Override
     public void create() {
         batch = new SpriteBatch();
-        gameScreen = new GameScreen(batch);
+        gameScreen = new AbstractUnit.GameScreen(batch);
         setScreen(gameScreen);
     }
 
